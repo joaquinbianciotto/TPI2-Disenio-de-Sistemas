@@ -2,6 +2,9 @@
     import { goto } from '$app/navigation';
     // Arreglo de patentes (RTOs) hardcodeadas
     import { onMount } from 'svelte';
+    import  rtos  from '../../../patentes.js';
+
+    
 
   let username = 'Usuario'; // Valor por defecto del usuario
 
@@ -10,12 +13,6 @@
     username = localStorage.getItem('loggedInUser') || 'Usuario';
   });
     
-    const rtos = [
-        { patente: 'ABC123', marca: 'Toyota', modelo: 'Corolla', año: '2019' },
-        { patente: 'XYZ789', marca: 'Ford', modelo: 'F-150', año: '2022' },
-        { patente: 'LMN456', marca: 'Honda', modelo: 'Civic', año: '2021' },
-        { patente: 'DEF987', marca: 'Chevrolet', modelo: 'Malibu', año: '2018' }
-    ];
 
     let patenteSeleccionada = '';
     let cliente = { nombre: '', dni: '', telefono: '', email: '' };  // Datos del cliente
