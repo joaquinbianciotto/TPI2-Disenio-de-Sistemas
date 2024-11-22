@@ -2,11 +2,11 @@
     import { goto } from '$app/navigation';
     // Arreglo de patentes (RTOs) hardcodeadas
     import { onMount } from 'svelte';
-    import  rtos  from '../../../patentes.js';
+    import  rtos  from '../../patentes.js';
 
     
 
-  let username = 'Usuario'; // Valor por defecto del usuario
+  let username = 'Usuario'; 
 
   // Recuperar el usuario desde localStorage al cargar la página
   onMount(() => {
@@ -165,7 +165,6 @@
     width: 100%;
     display: flex;
     margin-right: auto; 
-    align-items: center;
     padding: 1rem 2rem;
     background-color: #f5f5f5;
     border-bottom: 1px solid #ddd;
@@ -222,7 +221,7 @@
                 -->
                 <!--{#if patenteSeleccionada}-->
                     <div>
-                        <h3>Datos del Cliente</h3>
+                        <h3>Datos de facturacion</h3>
 
         
                         <div>
