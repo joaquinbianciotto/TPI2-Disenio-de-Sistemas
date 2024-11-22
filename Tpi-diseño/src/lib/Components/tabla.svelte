@@ -6,7 +6,7 @@
     import { tick } from "svelte";
     import dayGridPlugin from "@fullcalendar/daygrid";
     import timeGridPlugin from "@fullcalendar/timegrid";
-
+    import Modal from "./modal.svelte";
     let calendarElement;
     let calendar;
     let showModal = false;
@@ -18,7 +18,7 @@
         {
             id: "1",
             title: "Revisión SUV",
-            start: "2024-08-27T10:00:00",
+            start: "2024-11-27T10:00:00",
             description: "Revisión técnica para SUV.",
             marca: "Toyota",
             tipo: "SUV",
@@ -31,7 +31,7 @@
         {
             id: "2",
             title: "Revisión Sedán",
-            start: "2024-08-28T14:00:00",
+            start: "2024-11-22T14:00:00",
             description: "Revisión técnica para sedán.",
             marca: "Honda",
             tipo: "Sedán",
