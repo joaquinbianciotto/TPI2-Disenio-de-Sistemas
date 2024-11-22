@@ -118,14 +118,7 @@
             calendar.addEventSource(filteredEvents);
         }
     }
-    //funcion para cambiar vista entre calendario y lista
-    async function toggleVista() {
-        mostrarCalendario = !mostrarCalendario;
-        if (mostrarCalendario) {
-            await tick(); // Esperar a que el DOM se actualice
-            initializeCalendar();
-        }
-    }
+
     // Inicializar el calendario
     function initializeCalendar() {
         if (calendar) {
@@ -155,9 +148,7 @@
         calendar.render();
     }
     onMount(() => {
-        if (mostrarCalendario) {
-            initializeCalendar();
-        }
+        initializeCalendar();
     });
 
     function closeModal() {
@@ -166,7 +157,7 @@
     }
 </script>
 
-<div>
+<div id="cambios">
     <label for="tipo">Tipo:</label>
     <select id="tipo" bind:value={tipoFiltro} on:change={aplicarFiltros}>
         <option value="">Todos</option>
@@ -201,22 +192,9 @@
         placeholder="Buscar turnos..."
     />
     <button on:click={buscar}>Buscar</button>
-    <button on:click={toggleVista}>
-        {#if mostrarCalendario}
-            Ver como Lista
-        {:else}
-            Ver como Calendario
-        {/if}
-    </button>
 </div>
 
 <div bind:this={calendarElement} id="calendar"></div>
-
-{#if mostrarCalendario}
-    <div bind:this={calendarElement} id="calendar"></div>
-{:else}
-    <ListaTurnos {events} {busqueda} {searchFields} />
-{/if}
 
 {#if showModal && currentEvent}
     <Modal {currentEvent} close={closeModal} />
@@ -234,5 +212,12 @@
 
     select {
         margin-right: 10px;
+    }
+    #cambios {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 </style>
