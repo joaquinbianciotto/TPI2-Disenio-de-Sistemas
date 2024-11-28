@@ -83,9 +83,8 @@
 </style>
 
 <header>
-  
   <div class="user-info">
-    <span>{username}</span>
+    <span>Bienvenido, {username}</span>
     <div class="icon">U</div>
   </div>
 </header>

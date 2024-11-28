@@ -259,7 +259,7 @@
 
 <header>
     <div class="user-info">
-      <span>Bienvenido, {username}</span>
+      <span>{username}</span>
       <div class="icon">U</div>
     </div>
     <button class="home-button" on:click={() => goto('/Home')}>Inicio</button>
