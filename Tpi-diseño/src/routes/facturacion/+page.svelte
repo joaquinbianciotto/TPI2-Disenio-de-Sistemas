@@ -1,6 +1,5 @@
-<script>
+<script lang="ts"> 
     import { goto } from '$app/navigation';
-    // Arreglo de patentes (RTOs) hardcodeadas
     import { onMount } from 'svelte';
     import  rtos  from '../../patentes.js';
 
@@ -19,6 +18,9 @@
     let vehiculo = { marca: '', modelo: '', año: '' };  // Datos del vehículo
     let metodoPago = '';
     let facturaGenerada = false;
+    let fecha = '';
+    let tarjetaNumero = '';
+    let dni = '';
 
     function actualizarDetallesVehiculo() {
         const vehiculoSeleccionado = rtos.find(veh => veh.patente === patenteSeleccionada);
@@ -56,7 +58,7 @@
             DNI: ${cliente.dni}
             Teléfono: ${cliente.telefono}
 
-            Método de Pago: ${metodoPago === 'contado' ? 'Pago al contado' : 'Crédito'}
+            Método de Pago: ${metodoPago}
         `;
 
         const blob = new Blob([facturaTexto], { type: 'text/plain' });
@@ -68,6 +70,44 @@
         URL.revokeObjectURL(url);  
     }
 
+    // funciones de controladores de imputs
+
+    function formatFechaVencimiento(event : Event ) {
+        const input = event.target as HTMLInputElement | null;
+        if (input && input.value) {
+            let value = input.value.replace(/\D/g, ''); 
+            if (value.length >= 3) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4); 
+            }
+            fecha = value;
+        }
+    }
+
+    function formatearNumeroTarjeta(event: Event) {
+        const target = event.target as HTMLInputElement | null;
+        if (!target) return; 
+            let input = target.value.replace(/\D/g, ''); 
+            if (input.length > 16) {
+                input = input.slice(0, 16); 
+            }
+            input = input.match(/.{1,4}/g)?.join('-') || input; 
+            tarjetaNumero = input;
+    }
+
+    function formatearDNI(event: Event) {
+        const target = event.target as HTMLInputElement | null;
+        if (!target) return; // Verificar si target es null
+        let input = target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+        if (input.length > 8) {
+            input = input.slice(0, 8); // Limitar a 8 caracteres
+        }
+        if (input.length > 5) {
+            input = input.slice(0, 2) + '.' + input.slice(2, 5) + '.' + input.slice(5);
+        } else if (input.length > 2) {
+            input = input.slice(0, 2) + '.' + input.slice(2);
+        }
+        cliente.dni = input;
+    }
 </script>
 
 <style>
@@ -231,12 +271,12 @@
 
                         <div>
                             <label for="clienteDni">DNI:</label>
-                            <input type="text" id="clienteDni" bind:value={cliente.dni} placeholder="DNI del cliente" required />
+                            <input type="text" id="clienteDni" bind:value={cliente.dni} placeholder="DNI del cliente" maxlength="11" on:input={formatearDNI} required />
                         </div>
 
                         <div>
                             <label for="clienteTelefono">Teléfono:</label>
-                            <input type="tel" id="clienteTelefono" bind:value={cliente.telefono} placeholder="Teléfono del cliente" required />
+                            <input type="tel" id="clienteTelefono" bind:value={cliente.telefono} placeholder="Teléfono del cliente" maxlength="10" required />
                         </div>
 
                         <h3>Detalles del Vehículo</h3>
@@ -259,9 +299,26 @@
                         <h3>Método de Pago</h3>
                         <select id="metodoPago" bind:value={metodoPago} required>
                             <option value="">Seleccione un método de pago</option>
-                            <option value="contado">Pago al contado</option>
-                            <option value="credito">Crédito</option>
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Debito">Debito</option>
                         </select>
+
+                        {#if metodoPago === 'Debito'}
+                            <p>Datos de tarjeta</p>
+                            <div>
+                                <label for="tarjetaNumero">Número de tarjeta:</label>
+                                <input type="text" id="tarjetaNumero" placeholder="Número de tarjeta" bind:value={tarjetaNumero} on:input={formatearNumeroTarjeta} required />
+
+                                <label for="tarjetaVencimiento">Fecha de vencimiento:</label>
+                                <input 
+                                type="text" id="tarjetaVencimiento" placeholder="MM/AA" maxlength="5" bind:value={fecha} on:input={formatFechaVencimiento} required
+                                >
+
+                                <label for="tarjetaCvv">CVV:</label>
+                                <input type="text" id="tarjetaCvv" placeholder="CVV" maxlength="3" required/>
+
+                            </div>        
+                        {/if}
 
                         <button type="submit">Confirmar Pago</button>
                     </div>
@@ -280,7 +337,7 @@
         <p><strong>Cliente:</strong> {cliente.nombre}</p>
         <p><strong>DNI:</strong> {cliente.dni}</p>
         <p><strong>Teléfono:</strong> {cliente.telefono}</p>
-        <p><strong>Método de Pago:</strong> {metodoPago === 'contado' ? 'Pago al contado' : 'Crédito'}</p>
+        <p><strong>Método de Pago:</strong> {metodoPago}</p>
         <button on:click={descargarComprobante}>Descargar Comprobante</button>
         <br>
         <button on:click={() => facturaGenerada = false}>Generar otra factura</button>
