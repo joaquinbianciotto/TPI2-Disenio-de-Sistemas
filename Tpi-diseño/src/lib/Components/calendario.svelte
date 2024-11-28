@@ -113,6 +113,7 @@
                     dni: info.event.extendedProps.dni,
                     telefono: info.event.extendedProps.telefono,
                     email: info.event.extendedProps.email,
+                    patente: info.event.extendedProps.patente,
                 };
                 showModal = true;
             },

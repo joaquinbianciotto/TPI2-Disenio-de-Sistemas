@@ -5,10 +5,35 @@
         ThSort,
         ThFilter,
     } from "@vincjo/datatables";
+    import Modal from "./modal.svelte";
     //Datos de eventos con todos los campos necesarios
     export let turnos = [];
     const table = new TableHandler(turnos, { rowsPerPage: 5 });
-    const search = table.createSearch();
+    console.log(table.rows);
+    let showmodal = false;
+    let currentEvent;
+
+    function showModal(row) {
+        currentEvent = {
+            title: row.title,
+            start: row.start,
+            description: row.description,
+            marca: row.marca,
+            tipo: row.tipo,
+            categoria: row.categoria,
+            cliente: row.cliente,
+            dni: row.dni,
+            telefono: row.telefono,
+            email: row.email,
+            patente: row.patente,
+        };
+        showmodal = true;
+        console.log(currentEvent);
+    }
+    function closeModal() {
+        showmodal = false;
+        currentEvent = null;
+    }
 </script>
 
 <div class="table-container space-y-4">
@@ -46,7 +71,7 @@
 
                         <td>{row.email}</td>
                         <td>
-                            <button on:click={() => console.log(row.cliente)}>
+                            <button on:click={() => showModal(row)}>
                                 ver mas
                             </button>
                         </td></tr
@@ -57,10 +82,12 @@
     </Datatable>
 </div>
 <div class="add-button-container">
-    <button on:click={() => console.log("Agregar elemento")}>
-        Agregar elemento
-    </button>
+    <button on:click={() => console.log("agregar")}> Agregar elemento </button>
 </div>
+
+{#if showmodal && currentEvent}
+    <Modal {currentEvent} close={closeModal} />
+{/if}
 
 <style>
     .table-container {
