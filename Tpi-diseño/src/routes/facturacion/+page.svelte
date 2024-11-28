@@ -15,12 +15,13 @@
 
     let patenteSeleccionada = '';
     let cliente = { nombre: '', dni: '', telefono: '', email: '' };  // Datos del cliente
-    let vehiculo = { marca: '', modelo: '', año: '' };  // Datos del vehículo
+    let vehiculo = { marca: '', modelo: '', año: '', tipo:''};  // Datos del vehículo
     let metodoPago = '';
     let facturaGenerada = false;
     let fecha = '';
     let tarjetaNumero = '';
     let dni = '';
+    let monto = 0;
 
     function actualizarDetallesVehiculo() {
         const vehiculoSeleccionado = rtos.find(veh => veh.patente === patenteSeleccionada);
@@ -28,10 +29,13 @@
             vehiculo.marca = vehiculoSeleccionado.marca;
             vehiculo.modelo = vehiculoSeleccionado.modelo;
             vehiculo.año = vehiculoSeleccionado.año;
+            vehiculo.tipo = vehiculoSeleccionado.tipo;
+            monto = obtenerMontoPorTipoVehiculo(vehiculo.tipo);
         } else {
             vehiculo.marca = '';
             vehiculo.modelo = '';
             vehiculo.año = '';
+            vehiculo.tipo = '';
         }
     }
 
@@ -57,6 +61,8 @@
             Nombre: ${cliente.nombre}
             DNI: ${cliente.dni}
             Teléfono: ${cliente.telefono}
+            
+            Monto: ${monto}
 
             Método de Pago: ${metodoPago}
         `;
@@ -69,6 +75,22 @@
         a.click();
         URL.revokeObjectURL(url);  
     }
+
+    function obtenerMontoPorTipoVehiculo(tipo: string): number {
+        switch (tipo) {
+            case 'automovil':
+                return 500;
+            case 'trailer':
+                return 1000;
+            case 'camion':
+                return 2500;
+            case 'autobus':
+                return 2000;    
+            default:
+                return 0;
+        }
+    }
+
 
     // funciones de controladores de imputs
 
@@ -96,10 +118,10 @@
 
     function formatearDNI(event: Event) {
         const target = event.target as HTMLInputElement | null;
-        if (!target) return; // Verificar si target es null
-        let input = target.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+        if (!target) return; 
+        let input = target.value.replace(/\D/g, ''); 
         if (input.length > 8) {
-            input = input.slice(0, 8); // Limitar a 8 caracteres
+            input = input.slice(0, 8); 
         }
         if (input.length > 5) {
             input = input.slice(0, 2) + '.' + input.slice(2, 5) + '.' + input.slice(5);
@@ -112,7 +134,7 @@
 
 <style>
     .form-container {
-        background-color: #7b7a7c;
+        background-color: #888686;
         padding: 40px;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -296,6 +318,11 @@
                             <input type="text" id="vehiculoAño" bind:value={vehiculo.año} readonly />
                         </div>
 
+                        <div>
+                            <label for="vehiculoTipo">Tipo:</label>
+                            <input type="text" id="vehiculoTipo" bind:value={vehiculo.tipo} readonly />
+                        </div>
+
                         <h3>Método de Pago</h3>
                         <select id="metodoPago" bind:value={metodoPago} required>
                             <option value="">Seleccione un método de pago</option>
@@ -317,8 +344,9 @@
                                 <label for="tarjetaCvv">CVV:</label>
                                 <input type="text" id="tarjetaCvv" placeholder="CVV" maxlength="3" required/>
 
-                            </div>        
+                            </div>
                         {/if}
+                        <h3>Monto: {monto}</h3>
 
                         <button type="submit">Confirmar Pago</button>
                     </div>
@@ -338,6 +366,7 @@
         <p><strong>DNI:</strong> {cliente.dni}</p>
         <p><strong>Teléfono:</strong> {cliente.telefono}</p>
         <p><strong>Método de Pago:</strong> {metodoPago}</p>
+        <p><strong>Monto:</strong> {monto}</p>
         <button on:click={descargarComprobante}>Descargar Comprobante</button>
         <br>
         <button on:click={() => facturaGenerada = false}>Generar otra factura</button>
