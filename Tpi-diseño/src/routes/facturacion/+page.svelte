@@ -259,11 +259,11 @@
 
 <header>
     <div class="user-info">
-        <span>{username}</span>
-        <div class="icon">U</div>
+      <span>Bienvenido, {username}</span>
+      <div class="icon">U</div>
     </div>
-    <button class="home-button" on:click={() =>  goto('/Home')}>Home</button>
-</header>
+    <button class="home-button" on:click={() => goto('/Home')}>Inicio</button>
+  </header>
 
 {#if !facturaGenerada}
     <div class="form-container">
