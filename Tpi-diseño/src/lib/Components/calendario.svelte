@@ -14,47 +14,20 @@
 
     export let turnos;
     //Datos de eventos con todos los campos necesarios
-    let events = [
-        {
-            id: "1",
-            title: "Revisión SUV",
-            start: "2024-11-27T10:00:00",
-            description: "Revisión técnica para SUV.",
-            marca: "Toyota",
-            tipo: "SUV",
-            categoria: "B",
-            cliente: "Juan Pérez",
-            dni: "12345678",
-            telefono: "123456789",
-            email: "juanperez@example.com",
-        },
-        {
-            id: "2",
-            title: "Revisión Sedán",
-            start: "2024-11-22T14:00:00",
-            description: "Revisión técnica para sedán.",
-            marca: "Honda",
-            tipo: "Sedán",
-            categoria: "A",
-            cliente: "María Gómez",
-            dni: "23456789",
-            telefono: "234567890",
-            email: "mariagomez@example.com",
-        },
-    ];
+    let events = turnos;
 
     let event = turnos?.map((turno) => ({
         id: turno.id,
-        title: `Revisión ${turno.vehiculo.tipo}`,
+        title: turno.titulo,
         start: turno.fecha,
-        description: `Revisión técnica para ${turno.vehiculo.tipo}.`,
-        marca: turno.vehiculo.marca,
-        tipo: turno.vehiculo.tipo,
-        categoria: turno.vehiculo.categoria,
-        cliente: turno.cliente.nombre,
-        dni: turno.cliente.cuit,
-        telefono: turno.cliente.telefono,
-        email: turno.cliente.email,
+        description: turno.descripcion,
+        marca: turno.marca,
+        tipo: turno.tipo,
+        categoria: turno.categoria,
+        cliente: turno.nombre,
+        dni: turno.cuit,
+        telefono: turno.telefono,
+        email: turno.email,
     }));
 
     // Estados para los filtros

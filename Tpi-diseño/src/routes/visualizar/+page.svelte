@@ -6,15 +6,37 @@
     import Lista from "$lib/Components/lista.svelte";
     import Tabla from "$lib/Components/tabla.svelte";
     let username = "Usuario";
-    let turnos = [];
+    let turnos = [
+        {
+            id: "1",
+            title: "Revisión SUV",
+            start: "2024-11-27T10:00:00",
+            description: "Revisión técnica para SUV.",
+            marca: "Toyota",
+            tipo: "SUV",
+            categoria: "B",
+            cliente: "Juan Pérez",
+            dni: "12345678",
+            telefono: "123456789",
+            email: "juanperez@example.com",
+        },
+        {
+            id: "2",
+            title: "Revisión Sedán",
+            start: "2024-11-22T14:00:00",
+            description: "Revisión técnica para sedán.",
+            marca: "Honda",
+            tipo: "Sedán",
+            categoria: "A",
+            cliente: "María Gómez",
+            dni: "23456789",
+            telefono: "234567890",
+            email: "mariagomez@example.com",
+        },
+    ];
     // Recuperar el usuario desde localStorage al cargar la página
     onMount(() => {
         username = localStorage.getItem("loggedInUser") || "Usuario";
-        fetch("/Tpi-diseño/src/lib/datos/turnos.json")
-            .then((response) => response.json())
-            .then((data) => {
-                turnos = data;
-            });
     });
     let view = "lista";
 
