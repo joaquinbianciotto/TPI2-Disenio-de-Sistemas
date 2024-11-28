@@ -4,11 +4,17 @@
     import { onMount } from "svelte";
     import Calendario from "$lib/Components/calendario.svelte";
     import Lista from "$lib/Components/lista.svelte";
+    import Tabla from "$lib/Components/tabla.svelte";
     let username = "Usuario";
     let turnos = [];
     // Recuperar el usuario desde localStorage al cargar la página
     onMount(() => {
         username = localStorage.getItem("loggedInUser") || "Usuario";
+        fetch("/Tpi-diseño/src/lib/datos/turnos.json")
+            .then((response) => response.json())
+            .then((data) => {
+                turnos = data;
+            });
     });
     let view = "lista";
 
@@ -30,11 +36,14 @@
         <button on:click={() => switchView("calendario")}>Ver Calendario</button
         >
         <button on:click={() => switchView("lista")}>Ver Lista</button>
+        <button on:click={() => switchView("tabla")}>Ver Tabla</button>
     </div>
     {#if view === "calendario"}
         <Calendario {turnos} />
     {:else if view === "lista"}
         <Lista {turnos} />
+    {:else if view === "tabla"}
+        <Tabla {turnos} />
     {/if}
 </main>
 
