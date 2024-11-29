@@ -1,6 +1,15 @@
 <script>
     let reason = "";
     export let close;
+    export let onConfirm;
+    let motivos = [
+        "Falta de personal para el turno",
+        "Falta de insumos para el turno",
+        "Otro",
+    ];
+    function handleConfirm() {
+        onConfirm(reason);
+    }
 </script>
 
 <div class="modal-backdrop" on:click={close}></div>
@@ -9,9 +18,15 @@
     <div class="modal-content">
         <span class="close" on:click={close}>&times;</span>
         <p>¿Seguro de eliminar el turno?</p>
-        <textarea bind:value={reason} placeholder="Ingrese el motivo"
-        ></textarea>
-        <button on:click={close}>Confirmar</button>
+        <select bind:value={reason}>
+            <option value="" disabled selected>Seleccione un motivo</option>
+            {#each motivos as motivo}
+                <option value={motivo}>{motivo}</option>
+            {/each}
+        </select>
+        <div class="modal-buttons">
+            <button on:click={handleConfirm}>Confirmar</button>
+        </div>
     </div>
 </div>
 
@@ -55,7 +70,7 @@
 
     .modal-buttons {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         margin-top: 20px;
     }
 
@@ -66,5 +81,17 @@
         border: none;
         border-radius: 4px;
         cursor: pointer;
+    }
+    select {
+        width: 90%; /* Limitar el ancho del cuadro de texto al 90% del modal */
+        margin: 0 auto; /* Centrar el cuadro de texto horizontalmente */
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        height: auto; /* Permitir que el select se ajuste a su contenido */
+    }
+    p {
+        font-size: 1.2rem;
+        text-align: center;
     }
 </style>

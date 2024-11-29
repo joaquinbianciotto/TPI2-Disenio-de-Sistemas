@@ -2,13 +2,16 @@
     import BajaTurnos from "./bajaTurnos.svelte";
     export let currentEvent;
     export let close;
-
+    export let onDelete;
     let showmodal;
     function eliminarTurno() {
         showmodal = true;
     }
     function closeModal() {
         showmodal = false;
+    }
+    function borrado(razon) {
+        onDelete(razon);
     }
 </script>
 
@@ -53,7 +56,7 @@
     </div>
 </div>
 {#if showmodal}
-    <BajaTurnos close={closeModal} />
+    <BajaTurnos close={closeModal} onConfirm={borrado} />
 {/if}
 
 <style>
