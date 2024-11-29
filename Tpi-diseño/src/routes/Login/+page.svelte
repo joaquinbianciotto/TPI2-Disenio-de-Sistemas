@@ -90,8 +90,6 @@
     }
    
   </style>
-  
-    
 
     <form class='login-form' on:submit|preventDefault={handleSubmit}>
         <h1>Titulo de la pagina</h1>
