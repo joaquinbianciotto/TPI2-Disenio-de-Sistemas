@@ -1,111 +1,98 @@
 <script>
-    import { goto } from '$app/navigation';
+  import { goto } from '$app/navigation';
   
-    /**
-     * Simula la validación del inicio de sesión.
-     * @param {string} username
-     * @param {string} password
-     * @returns {boolean} true si es válido, false si no.
-     */
-    function login(username, password) {
-      // Sustituir con la lógica de validación real.
-      return username === 'admin' && password === '1234';
+  /**
+   * Simula la validación del inicio de sesión.
+   * @param {string} username
+   * @param {string} password
+   * @returns {boolean} true si es válido, false si no.
+   */
+  function login(username, password) {
+    // Sustituir con la lógica de validación real.
+    return username === 'admin' && password === '1234';
+  }
+  
+  let username = '';
+  let password = '';
+  
+  const handleSubmit = () => {
+    if (login(username, password)) {
+      localStorage.setItem('loggedInUser', username);
+      goto('/Home'); // Redirige a la página principal.
+    } else {
+      alert('Credenciales incorrectas');
     }
-  
-    let username = '';
-    let password = '';
-  
-    const handleSubmit = () => {
-      if (login(username, password)) {
-        localStorage.setItem('loggedInUser', username);
-        goto('/Home'); // Redirige a la página principal.
-      } else {
-        alert('Credenciales incorrectas');
-      }
-    };
-  </script>
+  };
+</script>
 
-  <style> 
-    
-    form {
-      max-width: 300px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    label {
-      display: block;
-      margin-bottom: 10px;
-      width: 100%;
-    }
-  
-    input {
-      width: 100%;
-      padding: 5px;
-      margin-top: 5px;
-    }
-  
-    button {
-      display: block;
-      margin-top: 10px;
-      padding: 5px 10px;
-      background-color: #0044ff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-  
-    button:hover {
-      background-color: #1b00b3;
-    }
-  
-    .login-form {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+<!-- Bootstrap CDN -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+/>
 
-    .login-form input{
-      margin: 10px 0;
-    }
+<style>
+  body {
+    background-color: #f7f7f7; /* Fondo gris claro */
+  }
 
-    h1 {
-      text-align: center;
-      margin-top: 100px;
-      width: 100%;
-    }
 
-    .form-conatainer{
-      background-color: #7b7a7c;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: auto ;
-    }
-   
-  </style>
+  .login-container {
+    max-width: 400px;
+    background-color: #7b7a7c; /* Fondo gris oscuro */
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: white;
+  }
 
-    <form class='login-form' on:submit|preventDefault={handleSubmit}>
-        <h1>Titulo de la pagina</h1>
-        <div class='form-conatainer'>    
-        <h1>Iniciar Sesión</h1>
-        <label>
-            Usuario:
-            <input type="text" bind:value={username} placeholder="Username" />
-        </label>
-        <br />
-        <label>
-        Contraseña:
-            <input type="password" bind:value={password} placeholder="Password" />
-        </label>
-        <br />
-        <button type="submit">Login</button>
-        </div>
+  .btn-primary {
+    background-color: #0044ff; /* Azul primario */
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background-color: #0033cc; /* Azul más oscuro */
+  }
+
+  .form-control {
+    background-color: #e0e0e0; /* Gris claro */
+    border: 1px solid #ccc;
+    color: #333;
+  }
+
+  h1 {
+    text-align: center;
+    color: white;
+  }
+</style>
+
+
+<div class="d-flex align-items-center justify-content-center vh-100">
+  <div class="login-container">
+    <h1>Iniciar Sesión</h1>
+    <form on:submit|preventDefault={handleSubmit}>
+      <div class="mb-3">
+        <label for="username" class="form-label">Usuario</label>
+        <input
+          type="text"
+          id="username"
+          class="form-control"
+          bind:value={username}
+          placeholder="Ingrese su usuario"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          class="form-control"
+          bind:value={password}
+          placeholder="Ingrese su contraseña"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
     </form>
-  
+  </div>
+</div>

@@ -386,20 +386,21 @@
         cursor: pointer;
     }
     form div {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 1rem;
-    }
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
 
-    label {
-        margin-bottom: 0.5rem;
-        font-weight: bold;
-    }
+  label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
 
-    input {
-        padding: 0.5rem;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
+  input {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
 </style>

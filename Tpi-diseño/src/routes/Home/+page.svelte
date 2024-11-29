@@ -1,4 +1,5 @@
 <script>
+
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
 
@@ -58,3 +59,4 @@
     background-color: #0056b3;
   }
 </style>
+
