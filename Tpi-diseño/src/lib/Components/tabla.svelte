@@ -128,6 +128,10 @@
         text-align: center;
         font-size: 1.2rem;
         text-decoration: none;
+        border-bottom: none;
+    }
+    tr {
+        font-size: 1.2rem;
     }
     .cabecera {
         background-color: #0288d1; /* Color azul para la cabecera */

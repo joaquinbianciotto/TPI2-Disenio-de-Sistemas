@@ -195,7 +195,7 @@
         username = localStorage.getItem("loggedInUser") || "Usuario";
     });
 
-    let view = "lista";
+    let view = "tabla";
 
     function switchView(selectedView) {
         view = selectedView;
@@ -214,13 +214,10 @@
     <div class="view-selector">
         <button on:click={() => switchView("calendario")}>Ver Calendario</button
         >
-        <button on:click={() => switchView("lista")}>Ver Lista</button>
         <button on:click={() => switchView("tabla")}>Ver Tabla</button>
     </div>
     {#if view === "calendario"}
         <Calendario {turnos} />
-    {:else if view === "lista"}
-        <Lista {turnos} />
     {:else if view === "tabla"}
         <Tabla {turnos} />
     {/if}
@@ -261,10 +258,18 @@
     }
     .view-selector {
         display: flex;
+        justify-content: center;
         gap: 1rem;
         margin: 1rem 0;
     }
-
+    button {
+        background-color: #0288d1;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+    }
     main {
         padding: 1rem;
     }
