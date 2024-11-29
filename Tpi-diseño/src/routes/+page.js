@@ -1,7 +1,8 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect } from "@sveltejs/kit";
 
 /** @type {import('./$types').PageLoad} */
 export function load() {
 
-  throw redirect(302, '/Home');
+  throw redirect(302, "/HomePublico");
+
 }

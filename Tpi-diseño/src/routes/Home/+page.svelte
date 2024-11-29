@@ -1,38 +1,62 @@
 <script>
-  import { goto } from '$app/navigation';
-  import { onMount } from 'svelte';
-  import 'bootstrap/dist/css/bootstrap.min.css';
+
+  import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
+
+  let username = "Usuario"; // Valor por defecto del usuario
+
+  // Recuperar el usuario desde localStorage al cargar la página
+  onMount(() => {
+    username = localStorage.getItem("loggedInUser") || "Usuario";
+  });
+
+  /**
+   * Manejo de las acciones de los botones
+   * @param {string} action Acción seleccionada
+   */
+  const handleAction = (action) => {
+    console.log(`Acción seleccionada: ${action}`);
+  };
 </script>
 
-
-<style>
-  /* Tus estilos personalizados aquí */
-</style>
-
-<header class="header d-flex justify-content-between align-items-center">
-  <h5 class="mb-0">Bienvenido, Usuario</h5>
-  <div class="user-icon"></div>
-</header>
-<main class="container text-center">
-  <h1 class="my-4">Título de la Página</h1>
-  <div class="button-group d-grid gap-3 mx-auto">
-    <button
-      class="btn btn-lg btn-primary"
-      on:click={() => goto('/facturacion')}
-    >
-      Facturación
-    </button>
-    <button
-      class="btn btn-lg btn-secondary"
-      on:click={() => goto('/modificar-turno')}
-    >
-      Modificar Turno
-    </button>
-    <button
-      class="btn btn-lg btn-info text-white"
-      on:click={() => goto('/visualizar')}
-    >
-      Ver Turnos
-    </button>
+<main>
+  <h1>Título de la Página</h1>
+  <div class="button-group">
+    <button on:click={() => goto("/facturacion")}>Facturacion</button>
+    <button on:click={() => goto("modificar turno")}>Modificar Turno</button>
+    <button on:click={() => goto("/visualizar")}>Ver Turnos</button>
   </div>
 </main>
+
+<style>
+  main {
+    text-align: center;
+    margin-top: 2rem;
+    width: 100%;
+  }
+
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 2rem;
+  }
+
+  button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 200px;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+</style>
+

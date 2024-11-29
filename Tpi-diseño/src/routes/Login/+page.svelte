@@ -36,6 +36,7 @@
     background-color: #f7f7f7; /* Fondo gris claro */
   }
 
+
   .login-container {
     max-width: 400px;
     background-color: #7b7a7c; /* Fondo gris oscuro */
@@ -65,6 +66,7 @@
     color: white;
   }
 </style>
+
 
 <div class="d-flex align-items-center justify-content-center vh-100">
   <div class="login-container">
