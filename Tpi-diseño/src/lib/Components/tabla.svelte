@@ -34,24 +34,35 @@
         showmodal = false;
         currentEvent = null;
     }
+    function formatDateTime(dateTime) {
+        const date = new Date(dateTime);
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+        return { formattedDate, formattedTime };
+    }
 </script>
 
 <div class="table-container space-y-4">
     <Datatable basic {table}>
         <table>
             <thead>
-                <tr>
-                    <ThSort {table} field="title">Título</ThSort>
-                    <ThSort {table} field="start">Fecha</ThSort>
-                    <ThSort {table} field="tipo">Tipo</ThSort>
-                    <ThSort {table} field="patente">Patente</ThSort>
-                    <ThSort {table} field="cliente">Cliente</ThSort>
-                    <ThSort {table} field="email">Email</ThSort>
+                <tr class="cabecera">
+                    <th><ThSort {table} field="title">Título</ThSort></th>
+                    <th><ThSort {table} field="start">Fecha</ThSort></th>
+                    <th><ThSort {table} field="start">Hora</ThSort></th>
+                    <th><ThSort {table} field="tipo">Tipo</ThSort></th>
+                    <th><ThSort {table} field="patente">Patente</ThSort></th>
+                    <th><ThSort {table} field="cliente">Cliente</ThSort></th>
+                    <th><ThSort {table} field="email">Email</ThSort></th>
+                    <th></th>
                 </tr>
                 <tr>
                     <ThFilter {table} field="title" />
                     <ThFilter {table} field="start" />
-
+                    <ThFilter {table} field="start" />
                     <ThFilter {table} field="tipo" />
                     <ThFilter {table} field="patente" />
                     <ThFilter {table} field="cliente" />
@@ -63,17 +74,19 @@
                 {#each table.rows as row (row.id)}
                     <tr>
                         <td>{row.title}</td>
-                        <td>{row.start}</td>
-
+                        <td>{formatDateTime(row.start).formattedDate}</td>
+                        <td>{formatDateTime(row.start).formattedTime}</td>
                         <td>{row.tipo}</td>
                         <td>{row.patente}</td>
                         <td>{row.cliente}</td>
 
                         <td>{row.email}</td>
                         <td>
-                            <button on:click={() => showModal(row)}>
-                                ver mas
-                            </button>
+                            <div class="add-button-container">
+                                <button on:click={() => showModal(row)}>
+                                    Ver detalles
+                                </button>
+                            </div>
                         </td></tr
                     >
                 {/each}
@@ -82,7 +95,7 @@
     </Datatable>
 </div>
 <div class="add-button-container">
-    <button on:click={() => console.log("agregar")}> Agregar elemento </button>
+    <button on:click={() => console.log("agregar")}> Agregar turno </button>
 </div>
 
 {#if showmodal && currentEvent}
@@ -100,17 +113,29 @@
     table {
         width: 95%;
         border-collapse: collapse;
+        border: 1px #ddd solid;
     }
 
-    th,
     td {
         padding: 8px;
         text-align: left;
         border-bottom: 2px solid #ddd;
+        font-size: 1.1rem;
+        border: 1px #ddd solid;
     }
-
+    th {
+        padding: 8px;
+        text-align: center;
+        font-size: 1.2rem;
+        text-decoration: none;
+    }
+    .cabecera {
+        background-color: #0288d1; /* Color azul para la cabecera */
+        font-size: 1.2rem;
+    }
     thead {
         background-color: #0288d1; /* Color azul para la cabecera */
+        font-size: 1;
     }
 
     @media (max-width: 768px) {

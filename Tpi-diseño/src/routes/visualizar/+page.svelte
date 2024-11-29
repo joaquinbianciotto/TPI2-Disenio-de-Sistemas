@@ -248,7 +248,7 @@
         justify-content: center;
         align-items: center;
         border-radius: 50%;
-        background-color: #007bff;
+        background-color: blue;
         color: white;
         font-size: 1.2rem;
         font-weight: bold;
