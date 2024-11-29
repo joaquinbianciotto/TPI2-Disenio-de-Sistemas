@@ -12,6 +12,8 @@
     console.log(table.rows);
     let showmodal = false;
     let currentEvent;
+    let showMensaje = false;
+    let mensaje = "";
 
     function showModal(row) {
         currentEvent = {
@@ -42,6 +44,14 @@
             minute: "2-digit",
         });
         return { formattedDate, formattedTime };
+    }
+    function handleConfirm() {
+        closeModal();
+        mensaje = "Turno eliminado exitosamente.";
+        showMensaje = true;
+        setTimeout(() => {
+            showMensaje = false;
+        }, 5000);
     }
 </script>
 
@@ -94,12 +104,15 @@
         </table>
     </Datatable>
 </div>
+{#if showMensaje}
+    <div class="mensaje">{mensaje}</div>
+{/if}
 <div class="add-button-container">
     <button on:click={() => console.log("agregar")}> Agregar turno </button>
 </div>
 
 {#if showmodal && currentEvent}
-    <Modal {currentEvent} close={closeModal} />
+    <Modal {currentEvent} close={closeModal} onDelete={handleConfirm} />
 {/if}
 
 <style>
@@ -170,5 +183,14 @@
 
     .add-button-container button:hover {
         background-color: #0277bd;
+    }
+    .mensaje {
+        background-color: #dff0d8;
+        color: #3c763d;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 16px;
+        text-align: center;
+        font-size: 1.2rem;
     }
 </style>
