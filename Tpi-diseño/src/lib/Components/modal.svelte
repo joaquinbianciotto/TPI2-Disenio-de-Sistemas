@@ -1,8 +1,15 @@
 <script>
+    import BajaTurnos from "./bajaTurnos.svelte";
     export let currentEvent;
     export let close;
 
-    console.log(currentEvent);
+    let showmodal;
+    function eliminarTurno() {
+        showmodal = true;
+    }
+    function closeModal() {
+        showmodal = false;
+    }
 </script>
 
 <div class="modal-backdrop" on:click={close}></div>
@@ -41,10 +48,13 @@
 
         <div class="modal-buttons">
             <button on:click={console.log("mod")}>Modificar Turno</button>
-            <button on:click={console.log("borrar")}>Eliminar Turno</button>
+            <button on:click={eliminarTurno}>Eliminar Turno</button>
         </div>
     </div>
 </div>
+{#if showmodal}
+    <BajaTurnos close={closeModal} />
+{/if}
 
 <style>
     .modal-backdrop {
