@@ -202,14 +202,6 @@
     }
 </script>
 
-<header>
-    <div class="user-info">
-        <span>{username}</span>
-        <div class="icon">U</div>
-    </div>
-    <button class="home-button" on:click={() => goto("/Home")}>Home</button>
-</header>
-
 <main>
     <div class="view-selector">
         <button on:click={() => switchView("calendario")}>Ver Calendario</button
@@ -224,38 +216,6 @@
 </main>
 
 <style>
-    header {
-        width: 100%;
-        display: flex;
-        margin-right: auto;
-        padding: 1rem 2rem;
-        background-color: #f5f5f5;
-        border-bottom: 1px solid #ddd;
-        box-sizing: border-box;
-    }
-
-    .home-button {
-        margin-left: auto;
-    }
-
-    .icon {
-        width: 35px;
-        height: 35px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        background-color: blue;
-        color: white;
-        font-size: 1.2rem;
-        font-weight: bold;
-    }
-
-    .user-info {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
     .view-selector {
         display: flex;
         justify-content: center;
