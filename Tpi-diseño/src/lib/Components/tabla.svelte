@@ -5,6 +5,7 @@
         ThSort,
         ThFilter,
     } from "@vincjo/datatables";
+    import { goto } from "$app/navigation";
     import Modal from "./modal.svelte";
     //Datos de eventos con todos los campos necesarios
     export let turnos = [];
@@ -108,7 +109,7 @@
     <div class="mensaje">{mensaje}</div>
 {/if}
 <div class="add-button-container">
-    <button on:click={() => console.log("agregar")}> Agregar turno </button>
+    <button on:click={() => goto("/alta_turnos")}> Agregar turno </button>
 </div>
 
 {#if showmodal && currentEvent}
