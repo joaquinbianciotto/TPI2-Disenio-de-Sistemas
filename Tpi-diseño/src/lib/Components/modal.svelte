@@ -71,15 +71,21 @@
     }
     .modal {
         position: fixed;
-        top: 20%; /* Ajustar la posición del modal más arriba */
+        top: 50%;
         left: 50%;
-        transform: translate(-50%, -20%);
-        background: white;
+        transform: translate(-50%, -50%);
+        background-color: white;
         padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
-        z-index: 20;
-        width: 80%;
-        max-width: 500px;
+        z-index: 1000;
+        width: 90%;
+        max-width: 30%;
+        max-height: 72%; /* Ajusta la altura máxima del modal */
+        overflow-y: auto; /* Permite el desplazamiento si el contenido es demasiado alto */
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
     .modal-content {
@@ -89,6 +95,7 @@
         border: 1px solid #888;
         width: 90%;
         max-width: 600px;
+        justify-content: center;
     }
 
     .close {
