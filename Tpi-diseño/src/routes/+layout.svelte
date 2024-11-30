@@ -173,7 +173,7 @@
       {#if currentPath !== '/Login' && currentPath !== '/HomePublico'}
         <div class="user-info">
           <img src="/src/user-icon.png" alt="User Icon" />
-          <span>{username}</span>
+          <span>{"Personal de atencion al cliente"}</span>
         </div>
       {/if}
 

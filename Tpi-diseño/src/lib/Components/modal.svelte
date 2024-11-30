@@ -6,22 +6,59 @@
     let showmodal;
 
     let editMode = false; 
-    let editableEvent = {};
+    let editableEvent = {
+        description: '',
+        date: '',
+        time: '',
+        cliente: '',
+        dni: '',
+        telefono: '',
+        email: '',
+        marca: '',
+        tipo: '',
+        patente: ''
+    };
 
     function enableEdit() {
         editMode = true;
-        editableEvent = { ...currentEvent }; 
+        const [date, time] = currentEvent.start.split('T');
+        editableEvent = {
+            description: currentEvent.description,
+            cliente: currentEvent.cliente,
+            dni: currentEvent.dni,
+            telefono: currentEvent.telefono,
+            email: currentEvent.email,
+            marca: currentEvent.marca,
+            tipo: currentEvent.tipo,
+            patente: currentEvent.patente
+        }; 
     }
 
     function saveChanges() {
-        currentEvent = { ...editableEvent }; 
+        currentEvent = {
+            ...currentEvent,
+            description: editableEvent.description,
+            start: `${editableEvent.date}T${editableEvent.time}`,
+            cliente: editableEvent.cliente,
+            dni: editableEvent.dni
+        };
         editMode = false;
         alert("¡Turno modificado con éxito!");
     }
 
     function cancelEdit() {
         editMode = false;
-        editableEvent = {};
+        editableEvent = {};editMode = false;
+        editableEvent = {
+            description: '',
+            cliente: '',
+            dni: '',
+            telefono: '',
+            email: '',
+            marca: '',
+            tipo: '',
+            patente: '' 
+        };
     }
 
 
@@ -34,6 +71,19 @@
     function borrado(razon) {
         onDelete(razon);
     }
+    function formatDateTime(dateTime) {
+        const date = new Date(dateTime);
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+        return { formattedDate, formattedTime };
+    }
+
+    let time = formatDateTime(currentEvent.start).formattedTime;
+    let date = formatDateTime(currentEvent.start).formattedDate;
+
 </script>
 
 <div class="modal-backdrop" on:click={close}></div>
@@ -47,9 +97,14 @@
                     <strong>Descripción:</strong>
                     <textarea bind:value={editableEvent.description} class="small-textarea"></textarea>
                 </label>
+
                 <label>
                     <strong>Fecha:</strong>
-                    <input type="date" bind:value={editableEvent.start} />
+                    <input type="date" bind:value={date} />
+                </label>
+                <label>
+                    <strong>Hora:</strong>
+                    <input type="time" bind:value={time} step="3600" min="00:00" max="23:00" pattern="^([01][0-9]|2[0-3]):00$"/>
                 </label>
 
                 <h2>Editar Datos del Cliente</h2>
@@ -65,6 +120,7 @@
                     <strong>Teléfono:</strong>
                     <input type="text" bind:value={editableEvent.telefono} />
                 </label>
+
                 <label>
                     <strong>Email:</strong>
                     <input type="email" bind:value={editableEvent.email} />
@@ -94,8 +150,8 @@
                     <strong>Descripción:</strong>
                     {currentEvent.description || "No disponible"}
                 </p>
-                <p><strong>Fecha:</strong> {currentEvent.start || "No disponible"}</p>
-
+                <p><strong>Fecha:</strong> {date || "No disponible"}</p>
+                <p><strong>Hora:</strong> {time || "No disponible"}</p>
                 <h2>Datos del Cliente</h2>
                 <p>
                     <strong>Cliente:</strong>
