@@ -15,8 +15,8 @@
 <div class="modal-backdrop" on:click={close}></div>
 
 <div class="modal">
+    <span class="close" on:click={close}>&times;</span>
     <div class="modal-content">
-        <span class="close" on:click={close}>&times;</span>
         <p>¿Seguro de eliminar el turno?</p>
         <select bind:value={reason}>
             <option value="" disabled selected>Seleccione un motivo</option>
@@ -38,34 +38,42 @@
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
-        z-index: 30; /* Asegurarse de que el backdrop esté por encima del modal principal */
+        z-index: 999; /* Asegurarse de que el backdrop esté por encima del modal principal */
     }
 
     .modal {
         position: fixed;
-        top: 30%; /* Ajustar la posición del modal */
+        top: 50%; /* Ajustar la posición del modal */
         left: 50%;
         transform: translate(-50%, -30%);
         background: white;
         padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
-        z-index: 40; /* Asegurarse de que el modal esté por encima del modal principal */
-        width: 80%;
-        max-width: 500px;
+        z-index: 1000; /* Asegurarse de que el modal esté por encima del modal principal */
+        width: 90%;
+        max-width: 30%;
+        max-height: 25%;
+        overflow-y: auto; /* Permite el desplazamiento si el contenido es demasiado alto */
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
     .modal-content {
         display: flex;
         flex-direction: column;
         gap: 1rem;
+        margin-top: 20px;
     }
 
     .close {
         position: absolute;
-        top: 10px;
+        top: 1px;
         right: 10px;
         font-size: 1.5rem;
         cursor: pointer;
+        z-index: 1001; /* Asegurarse de que el botón de cerrar esté por encima del contenido modal */
     }
 
     .modal-buttons {
