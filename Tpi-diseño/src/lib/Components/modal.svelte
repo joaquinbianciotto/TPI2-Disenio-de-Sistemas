@@ -4,6 +4,27 @@
     export let close;
     export let onDelete;
     let showmodal;
+
+    let editMode = false; 
+    let editableEvent = {};
+
+    function enableEdit() {
+        editMode = true;
+        editableEvent = { ...currentEvent }; 
+    }
+
+    function saveChanges() {
+        currentEvent = { ...editableEvent }; 
+        editMode = false;
+        alert("¡Turno modificado con éxito!");
+    }
+
+    function cancelEdit() {
+        editMode = false;
+        editableEvent = {};
+    }
+
+
     function eliminarTurno() {
         showmodal = true;
     }
@@ -20,39 +41,87 @@
     <span class="close" on:click={close}>&times;</span>
     <div class="modal-content">
         <h1>{currentEvent.title || "no disponible"}</h1>
+        {#if editMode}
+                <h2>Editar Datos del Turno</h2>
+                <label>
+                    <strong>Descripción:</strong>
+                    <textarea bind:value={editableEvent.description} class="small-textarea"></textarea>
+                </label>
+                <label>
+                    <strong>Fecha:</strong>
+                    <input type="date" bind:value={editableEvent.start} />
+                </label>
 
-        <h2>Datos del Turno</h2>
-        <p>
-            <strong>Descripción:</strong>
-            {currentEvent.description || "No disponible"}
-        </p>
-        <p><strong>Fecha:</strong> {currentEvent.start || "No disponible"}</p>
+                <h2>Editar Datos del Cliente</h2>
+                <label>
+                    <strong>Cliente:</strong>
+                    <input type="text" bind:value={editableEvent.cliente} />
+                </label>
+                <label>
+                    <strong>DNI:</strong>
+                    <input type="text" bind:value={editableEvent.dni} />
+                </label>
+                <label>
+                    <strong>Teléfono:</strong>
+                    <input type="text" bind:value={editableEvent.telefono} />
+                </label>
+                <label>
+                    <strong>Email:</strong>
+                    <input type="email" bind:value={editableEvent.email} />
+                </label>
 
-        <h2>Datos del Cliente</h2>
-        <p>
-            <strong>Cliente:</strong>
-            {currentEvent.cliente || "No disponible"}
-        </p>
-        <p><strong>DNI:</strong> {currentEvent.dni || "No disponible"}</p>
-        <p>
-            <strong>Teléfono:</strong>
-            {currentEvent.telefono || "No disponible"}
-        </p>
-        <p><strong>Email:</strong> {currentEvent.email || "No disponible"}</p>
+                <h2>Editar Datos del Vehículo</h2>
+                <label>
+                    <strong>Marca:</strong>
+                    <input type="text" bind:value={editableEvent.marca} />
+                </label>
+                <label>
+                    <strong>Tipo:</strong>
+                    <input type="text" bind:value={editableEvent.tipo} />
+                </label>
+                <label>
+                    <strong>Patente:</strong>
+                    <input type="text" bind:value={editableEvent.patente} />
+                </label>
 
-        <h2>Datos del Vehículo</h2>
-        <p><strong>Marca:</strong> {currentEvent.marca || "No disponible"}</p>
-        <p><strong>Tipo:</strong> {currentEvent.tipo || "No disponible"}</p>
-        <p>
-            <strong>Patente:</strong>
-            {currentEvent.patente || "No disponible"}
-        </p>
+                <div class="modal-buttons">
+                    <button on:click={saveChanges}>Listo</button>
+                    <button on:click={cancelEdit}>Cancelar</button>
+                </div>
+        {:else}
+                <h2>Datos del Turno</h2>
+                <p>
+                    <strong>Descripción:</strong>
+                    {currentEvent.description || "No disponible"}
+                </p>
+                <p><strong>Fecha:</strong> {currentEvent.start || "No disponible"}</p>
 
-        <div class="modal-buttons">
-            <button on:click={console.log("mod")}>Modificar Turno</button>
-            <button on:click={eliminarTurno}>Eliminar Turno</button>
-        </div>
-    </div>
+                <h2>Datos del Cliente</h2>
+                <p>
+                    <strong>Cliente:</strong>
+                    {currentEvent.cliente || "No disponible"}
+                </p>
+                <p><strong>DNI:</strong> {currentEvent.dni || "No disponible"}</p>
+                <p>
+                    <strong>Teléfono:</strong>
+                    {currentEvent.telefono || "No disponible"}
+                </p>
+                <p><strong>Email:</strong> {currentEvent.email || "No disponible"}</p>
+
+                <h2>Datos del Vehículo</h2>
+                <p><strong>Marca:</strong> {currentEvent.marca || "No disponible"}</p>
+                <p><strong>Tipo:</strong> {currentEvent.tipo || "No disponible"}</p>
+                <p>
+                    <strong>Patente:</strong>
+                    {currentEvent.patente || "No disponible"}
+                </p>
+
+                <div class="modal-buttons">
+                    <button on:click={enableEdit}>Modificar Turno</button>
+                    <button on:click={eliminarTurno}>Eliminar Turno</button>
+                </div>
+        {/if}
+    </div>    
 </div>
 {#if showmodal}
     <BajaTurnos close={closeModal} onConfirm={borrado} />
@@ -128,4 +197,11 @@
         border-radius: 4px;
         cursor: pointer;
     }
+
+    .small-textarea {
+        width: 60%; 
+        height: 30px; 
+        resize: none; 
+    }
+
 </style>

@@ -8,8 +8,8 @@
    * @returns {boolean} true si es válido, false si no.
    */
   function login(username, password) {
-    // Sustituir con la lógica de validación real.
-    return username === 'admin' && password === '1234';
+    
+    return true;
   }
   
   let username = '';
@@ -80,6 +80,7 @@
           class="form-control"
           bind:value={username}
           placeholder="Ingrese su usuario"
+          required
         />
       </div>
       <div class="mb-3">
@@ -90,6 +91,7 @@
           class="form-control"
           bind:value={password}
           placeholder="Ingrese su contraseña"
+          required
         />
       </div>
       <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
