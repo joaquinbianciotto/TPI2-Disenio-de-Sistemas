@@ -1,11 +1,32 @@
-<script>
+<script lang="ts">
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
-  let currentPath = $page.url.pathname; // Ruta actual
+  import { onMount, onDestroy } from 'svelte';
+
+  let currentPath = '';
+  let username = 'Usuario';
+
+  $: {
+    const unsubscribe = page.subscribe(($page) => {
+      currentPath = $page.url.pathname;
+    });
+    onDestroy(() => {
+      unsubscribe();
+    });
+  }
+  
+  onMount(() => {
+    username = localStorage.getItem("loggedInUser") || "Usuario";
+  });
+
+  function navigateTo(path: string) {
+        goto(path).then(() => {
+            currentPath = path;
+        });
+    }
 </script>
 
 <style>
-
   nav {
     background-color: #f5f5f5;
     padding: 1rem 2rem;
@@ -50,7 +71,29 @@
     color: #0056b3;
     font-size: 0.9rem;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    margin-top: 2rem;
+    margin-top: 0;
+  }
+
+  main{
+    flex: 1 ;
+  }
+
+  .page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .user-info img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
   }
 
   .footer-content {
@@ -76,6 +119,9 @@
     align-items: center;
     padding: 10px 0;
   }
+
+
+  /*estilos para otros tipos de pantallas*/
 
   /* Media Query para pantallas pequeñas */
   @media (max-width: 768px) {
@@ -114,28 +160,34 @@
   }
 </style>
 
-<nav>
-  <a href="/Home" class="logo"><img src="/rto-movil.png" alt="logo"></a>
-  <div class="buttons">
-    <button on:click={() =>  goto('/Home')}>Inicio</button>
-    <button on:click={() =>  goto('/About')}>Sobre Nosotros</button>
+<div class="page-container">
+  <nav>
+    <a href="/Home" class="logo"><img src="/rto-movil.png" alt="logo"></a>
+    <div class="buttons">
+      
+      {#if currentPath == '/HomePublico'}
+        <button on:click={() =>  goto('/Login')}>Iniciar Sesión</button>
+      {/if}
+    </div>
 
-    {#if currentPath !== '/Login'}
-      <button on:click={() =>  goto('/Login')}>Iniciar Sesión</button>
-    {/if}
+      {#if currentPath !== '/Login' && currentPath !== '/HomePublico'}
+        <div class="user-info">
+          <img src="/src/user-icon.png" alt="User Icon" />
+          <span>{username}</span>
+        </div>
+      {/if}
 
-    {#if currentPath !== '/Register'}
-      <button on:click={() =>  goto('/Register')}>Registrarse</button>
-    {/if}
-  </div>
-</nav>
+  </nav>
 
-<slot />
+  <main>
+    <slot />
+  </main>
 
-<footer>
-  <div class="footer-content">
-    <p>© 2024 Desarrollado con 💙 por el Grupo 8.</p>
-    <p>Contacto: grupo8@gmail.com</p>
-  </div>
-</footer>
+  <footer>
+    <div class="footer-content">
+      <p>© 2024 Desarrollado con 💙 por el Grupo 8.</p>
+      <p>Contacto: grupo8@gmail.com</p>
+    </div>
+  </footer>
+</div>
 
