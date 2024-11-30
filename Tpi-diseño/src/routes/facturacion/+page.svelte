@@ -1,23 +1,23 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
     import { onMount } from "svelte";
     import rtos from "../../patentes.js";
 
     let username = "Usuario";
 
-    // Recuperar el usuario desde localStorage al cargar la página
     onMount(() => {
         username = localStorage.getItem("loggedInUser") || "Usuario";
     });
 
     let patenteSeleccionada = "";
-    let cliente = { nombre: "", dni: "", telefono: "", email: "" }; // Datos del cliente
-    let vehiculo = { marca: "", modelo: "", año: "", tipo: "" }; // Datos del vehículo
+    let cliente = { nombre: "", dni: "", telefono: "", email: "" };
+    let vehiculo = { marca: "", modelo: "", año: "", tipo: "" };
     let metodoPago = "";
     let facturaGenerada = false;
-    let fecha = "";
+    let fecha ='';
     let tarjetaNumero = "";
-    let dni = "";
+    let tarjetaTitular = "";
+    let tarjetaVencimiento = "";
+    let tarjetaCvv = "";
     let monto = 0;
 
     function actualizarDetallesVehiculo() {
@@ -39,39 +39,11 @@
     }
 
     function generarFactura() {
-        if (patenteSeleccionada) {
-            actualizarDetallesVehiculo();
-            facturaGenerada = true;
+        if (metodoPago === "Debito" && (!tarjetaNumero || !tarjetaTitular)) {
+            alert("Por favor, complete los datos de la tarjeta.");
+            return;
         }
-    }
-
-    function descargarComprobante() {
-        const facturaTexto = `
-            Factura Generada:
-            -------------------
-            Patente: ${patenteSeleccionada}
-            Marca: ${vehiculo.marca}
-            Modelo: ${vehiculo.modelo}
-            Año: ${vehiculo.año}
-
-            Cliente:
-            --------
-            Nombre: ${cliente.nombre}
-            DNI: ${cliente.dni}
-            Teléfono: ${cliente.telefono}
-            
-            Monto: ${monto}
-
-            Método de Pago: ${metodoPago}
-        `;
-
-        const blob = new Blob([facturaTexto], { type: "text/plain" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "comprobante_factura.txt";
-        a.click();
-        URL.revokeObjectURL(url);
+        facturaGenerada = true;
     }
 
     function obtenerMontoPorTipoVehiculo(tipo: string): number {
@@ -89,7 +61,30 @@
         }
     }
 
-    // funciones de controladores de imputs
+    function descargarFactura() {
+        const contenido = `
+        Factura Generada:
+        Fecha: ${fecha}
+        Cliente: ${cliente.nombre}
+        DNI: ${cliente.dni}
+        Teléfono: ${cliente.telefono}
+
+        Vehículo:
+        Patente: ${patenteSeleccionada}
+        Marca: ${vehiculo.marca}
+        Modelo: ${vehiculo.modelo}
+        Año: ${vehiculo.año}
+        Tipo: ${vehiculo.tipo}
+
+        Método de Pago: ${metodoPago}
+        Monto: $${monto}`;
+
+        const blob = new Blob([contenido], { type: "text/plain" });
+        const enlace = document.createElement("a");
+        enlace.href = URL.createObjectURL(blob);
+        enlace.download = `Factura_${patenteSeleccionada}.txt`;
+        enlace.click();
+    }
 
     function formatFechaVencimiento(event: Event) {
         const input = event.target as HTMLInputElement | null;
@@ -139,29 +134,28 @@
         <h2>Generar Factura</h2>
 
         <form on:submit|preventDefault={generarFactura}>
-            <label for="patente">Seleccionar Patente:</label>
-            <select
-                id="patente"
-                bind:value={patenteSeleccionada}
-                on:change={actualizarDetallesVehiculo}
-                required
-            >
-                <option value="">Seleccione una patente</option>
-                {#each rtos as rto}
-                    <option value={rto.patente}
-                        >{rto.patente} - {rto.marca} {rto.modelo}</option
-                    >
-                {/each}
-            </select>
+            <!-- Selección de Patente -->
+            <div class="form-group">
+                <label for="patente">Seleccionar Patente:</label>
+                <select
+                    id="patente"
+                    bind:value={patenteSeleccionada}
+                    on:change={actualizarDetallesVehiculo}
+                    required
+                >
+                    <option value="">Seleccione una patente</option>
+                    {#each rtos as rto}
+                        <option value={rto.patente}
+                            >{rto.patente} - {rto.marca} {rto.modelo}</option
+                        >
+                    {/each}
+                </select>
+            </div>
 
-            <!--
-                    
-                -->
-            <!--{#if patenteSeleccionada}-->
-            <div>
-                <h3>Datos de facturacion</h3>
-
-                <div>
+            <!-- Datos del Cliente -->
+            <h3>Datos del Cliente</h3>
+            <div class="form-row">
+                <div class="form-group">
                     <label for="clienteNombre">Nombre:</label>
                     <input
                         type="text"
@@ -171,8 +165,7 @@
                         required
                     />
                 </div>
-
-                <div>
+                <div class="form-group">
                     <label for="clienteDni">DNI:</label>
                     <input
                         type="text"
@@ -184,8 +177,7 @@
                         required
                     />
                 </div>
-
-                <div>
+                <div class="form-group">
                     <label for="clienteTelefono">Teléfono:</label>
                     <input
                         type="tel"
@@ -196,10 +188,12 @@
                         required
                     />
                 </div>
+            </div>
 
-                <h3>Detalles del Vehículo</h3>
-
-                <div>
+            <!-- Detalles del Vehículo -->
+            <h3>Detalles del Vehículo</h3>
+            <div class="form-row">
+                <div class="form-group">
                     <label for="vehiculoMarca">Marca:</label>
                     <input
                         type="text"
@@ -208,8 +202,7 @@
                         readonly
                     />
                 </div>
-
-                <div>
+                <div class="form-group">
                     <label for="vehiculoModelo">Modelo:</label>
                     <input
                         type="text"
@@ -238,17 +231,23 @@
                         readonly
                     />
                 </div>
+            </div>
 
-                <h3>Método de Pago</h3>
+            <!-- Método de Pago -->
+            <h3>Método de Pago</h3>
+            <div class="form-group">
+                <label for="metodoPago">Seleccione un método:</label>
                 <select id="metodoPago" bind:value={metodoPago} required>
                     <option value="">Seleccione un método de pago</option>
                     <option value="Efectivo">Efectivo</option>
                     <option value="Debito">Debito</option>
                 </select>
+            </div>
 
-                {#if metodoPago === "Debito"}
-                    <p>Datos de tarjeta</p>
-                    <div>
+            {#if metodoPago === "Debito"}
+                <p>Datos de tarjeta</p>
+                <div class="form-row">
+                    <div class="form-group">
                         <label for="tarjetaNumero">Número de tarjeta:</label>
                         <input
                             type="text"
@@ -258,7 +257,18 @@
                             on:input={formatearNumeroTarjeta}
                             required
                         />
-
+                    </div>
+                    <div class="form-group">
+                        <label for="tarjetaTitular">Titular de la Tarjeta:</label>
+                        <input
+                            type="text"
+                            id="tarjetaTitular"
+                            bind:value={tarjetaTitular}
+                            placeholder="Titular de la tarjeta"
+                            required
+                        />
+                    </div>
+                    <div class="form-group">
                         <label for="tarjetaVencimiento"
                             >Fecha de vencimiento:</label
                         >
@@ -271,136 +281,133 @@
                             on:input={formatFechaVencimiento}
                             required
                         />
-
-                        <label for="tarjetaCvv">CVV:</label>
-                        <input
-                            type="text"
-                            id="tarjetaCvv"
-                            placeholder="CVV"
-                            maxlength="3"
-                            required
-                        />
                     </div>
-                {/if}
-                <h3>Monto: {monto}</h3>
+                </div>
+            {/if}
 
-                <button type="submit">Confirmar Pago</button>
-            </div>
-            <!--{/if}-->
+            <h3>Monto: {monto}</h3>
+            <button type="submit">Confirmar Pago</button>
         </form>
     </div>
-{/if}
+{:else}
+    <div class="resumen-container">
+        <h2>Resumen de Factura</h2>
+        <p>Cliente: {cliente.nombre}</p>
+        <p>DNI: {cliente.dni}</p>
+        <p>Teléfono: {cliente.telefono}</p>
 
-{#if facturaGenerada}
-    <div class="factura-container">
-        <h2>Factura Generada</h2>
-        <p><strong>Patente:</strong> {patenteSeleccionada}</p>
-        <p><strong>Marca:</strong> {vehiculo.marca}</p>
-        <p><strong>Modelo:</strong> {vehiculo.modelo}</p>
-        <p><strong>Año:</strong> {vehiculo.año}</p>
-        <p><strong>Cliente:</strong> {cliente.nombre}</p>
-        <p><strong>DNI:</strong> {cliente.dni}</p>
-        <p><strong>Teléfono:</strong> {cliente.telefono}</p>
-        <p><strong>Método de Pago:</strong> {metodoPago}</p>
-        <p><strong>Monto:</strong> {monto}</p>
-        <button on:click={descargarComprobante}>Descargar Comprobante</button>
+        <p>Vehículo:</p>
+        <ul>
+            <li>Patente: {patenteSeleccionada}</li>
+            <li>Marca: {vehiculo.marca}</li>
+            <li>Modelo: {vehiculo.modelo}</li>
+            <li>Año: {vehiculo.año}</li>
+            <li>Tipo: {vehiculo.tipo}</li>
+        </ul>
+
+        <p>Método de Pago: {metodoPago}</p>
+        <p>Monto: ${monto}</p>
+
+        <button on:click={descargarFactura}>Descargar Factura</button>
         <br />
-        <button on:click={() => (facturaGenerada = false)}
-            >Generar otra factura</button
-        >
+        <button on:click={() => (facturaGenerada = false)}>Generar otra factura</button>
     </div>
 {/if}
 
 <style>
     .form-container {
-        background-color: #888686;
-        padding: 40px;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .form-group {
+        flex: 1 1 calc(50% - 20px);
         display: flex;
         flex-direction: column;
-        align-items: center;
-        margin: 50px auto;
-        max-width: 600px;
-        display: block;
     }
 
-    .form-container h2 {
-        margin-bottom: 20px;
+    label {
+        font-weight: bold;
+        margin-bottom: 5px;
     }
 
-    .form-container label {
-        margin-top: 10px;
-    }
-
-    .form-container input,
-    .form-container select {
-        margin-bottom: 10px;
-        padding: 8px;
-        width: 100%;
-        max-width: 300px;
-        border-radius: 5px;
+    input,
+    select {
+        padding: 10px;
+        font-size: 1rem;
         border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
     }
 
-    .form-container button {
+    button {
         margin-top: 20px;
         padding: 10px 20px;
-        background-color: #4caf50;
+        background-color: #007bff;
         color: white;
         border: none;
         border-radius: 5px;
         cursor: pointer;
     }
 
-    .form-container button:hover {
-        background-color: #45a049;
+    button:hover {
+        background-color: #007bff;
     }
 
-    .factura-container {
-        background-color: #d0cfd1;
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    h3 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .resumen-container {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         align-items: center;
-        margin: 50px auto;
-        max-width: 600px;
+        text-align: center;
+        height: 100vh; /* Asegura que ocupe toda la altura de la pantalla */
+        margin: 0; /* Elimina márgenes extra */
     }
 
-    .factura-container h2 {
+    .resumen-container h2 {
         margin-bottom: 20px;
     }
 
-    .factura-container p {
+    .resumen-container p {
         margin: 10px 0;
     }
 
-    .factura-container button {
-        background-color: #4caf50;
-        color: white;
-        border: none;
+    .resumen-container ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .resumen-container ul li {
+        margin: 5px 0;
+    }
+
+    .resumen-container button {
+        margin-top: 20px;
         padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
         border-radius: 5px;
         cursor: pointer;
+        font-size: 16px;
     }
-    form div {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1rem;
-  }
 
-  label {
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-
-  input {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-
+    .resumen-container button:hover {
+        background-color: #0056b3;
+    }
 </style>
