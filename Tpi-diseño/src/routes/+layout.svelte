@@ -166,11 +166,11 @@
     <div class="buttons">
       
       {#if currentPath == '/HomePublico'}
-        <button on:click={() =>  goto('/Login')}>Iniciar Sesión</button>
+        <button on:click={() =>  goto('/Login2')}>Iniciar Sesión</button>
       {/if}
     </div>
 
-      {#if currentPath !== '/Login' && currentPath !== '/HomePublico'}
+      {#if currentPath !== '/Login2' && currentPath !== '/HomePublico'}
         <div class="user-info">
           <img src="/src/user-icon.png" alt="User Icon" />
           <span>{"Personal de atencion al cliente"}</span>
