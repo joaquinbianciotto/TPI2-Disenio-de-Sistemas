@@ -20,18 +20,19 @@
 </script>
 
 <main>
-  <h1>Título de la Página</h1>
   <div class="button-group">
     <button on:click={() => goto("/facturacion")}>Facturacion</button>
-    <button on:click={() => goto("modificar turno")}>Modificar Turno</button>
     <button on:click={() => goto("/visualizar")}>Ver Turnos</button>
   </div>
 </main>
 
 <style>
   main {
+    display: flex;
+    justify-content: center;
     text-align: center;
-    margin-top: 2rem;
+    align-items: center;
+    height: 60vh;
     width: 100%;
   }
 
@@ -39,8 +40,6 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    align-items: center;
-    margin-top: 2rem;
   }
 
   button {
